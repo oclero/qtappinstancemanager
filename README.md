@@ -2,9 +2,8 @@
 	<img height="50" src="logo.svg">
 </div>
 </br>
-<div align="center">
-  <h1>QtAppInstanceManager</h1>
-</div>
+
+# QtAppInstanceManager
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](https://mit-license.org/)
 [![CMake version](https://img.shields.io/badge/CMake-3.19+-064F8C?logo=cmake)](https://www.qt.io)
