@@ -112,9 +112,9 @@ QObject::connect(&instanceManager,
   [&instanceManager]() {
     // There is a short period of time before roles are assigned again.
     if (!instanceManager.isPrimaryInstance() && !instanceManager.isSecondaryInstance()) {
-      qDebug() << "Waiting for new instance role...";
+      qDebug() << "Waiting for new role...";
     } else {
-      qDebug() << "New instance role: " << (instanceManager.isPrimaryInstance() ? "Primary" : "Secondary");
+      qDebug() << "New role: " << (instanceManager.isPrimaryInstance() ? "Primary" : "Secondary");
     }
   });
 ```
