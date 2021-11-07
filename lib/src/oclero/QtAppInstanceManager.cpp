@@ -1,7 +1,6 @@
 #include <oclero/QtAppInstanceManager.hpp>
 
 #include <QCoreApplication>
-#include <QDebug>
 #include <QTimer>
 
 #include "LocalEndpoint.hpp"
