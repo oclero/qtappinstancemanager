@@ -20,4 +20,5 @@ add_subdirectory(lib)
 add_subdirectory(tests)
 
 # Examples.
-add_subdirectory(example)
+add_subdirectory(examples/single)
+add_subdirectory(examples/multiple)
