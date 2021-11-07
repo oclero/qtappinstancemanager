@@ -9,17 +9,31 @@
 [![C++ version](https://img.shields.io/badge/C++-17-00599C?logo=++)](https://www.qt.io)
 [![Qt version](https://img.shields.io/badge/Qt-5.15.2+-41CD52?logo=qt)](https://www.qt.io)
 
-**QtAppInstanceManager** is tool to control how many instances of your Qt5 application are running at the same time, and to send messages between instances. It uses a local socket under the hood. You may then build upon this foundation any messaging system or protocol, such as JSON-RPC for instance (NB: not provided because out of the scope of this library).
+**QtAppInstanceManager** is a tool to control how many instances of your Qt5 application are running at the same time, and to send messages between instances. It uses a local socket under the hood. You may then build upon this foundation any messaging system or protocol, such as JSON-RPC for instance (NB: not provided because out of the scope of this library).
 
 It is intended to be a replacement for `QtSingleApplication`, the deprecated Qt4 official project.
 
 Also, it differs from [itay-grudev's SingleApplication](https://github.com/itay-grudev/SingleApplication) because you don't need to inherit a child class of `QCoreApplication` to use `QtAppInstanceManager`, therefore it doesn't need configure-time flags and macros.
 
+---
+
+### Table of Contents
+
+- [Requirements](#requirements)
+- [Usage](#usage)
+- [Examples](#examples)
+  - [Single application](#single-application)
+  - [Multiple application instances](#multiple-application-instances)
+- [Author](#author)
+- [License](#license)
+
+---
+
 ## Requirements
 
 - Platform: Windows, MacOS, Linux.
-- CMake 3.19+
-- Qt 5.15+
+- [CMake 3.19+](https://cmake.org/download/)
+- [Qt 5.15+](https://www.qt.io/download-qt-installer)
 
 ## Usage
 
@@ -55,7 +69,7 @@ Also, it differs from [itay-grudev's SingleApplication](https://github.com/itay-
 
 ## Examples
 
-### Single application instance
+### Single application
 
 Just create an `oclero::QtAppInstanceManager` and configure it to allow only one instance running at the same time with `setForceSingleInstance(true)`.
 
