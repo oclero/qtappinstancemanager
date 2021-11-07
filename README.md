@@ -1,7 +1,6 @@
 <div align="center">
 	<img height="50" src="logo.svg">
 </div>
-</br>
 
 # QtAppInstanceManager
 
