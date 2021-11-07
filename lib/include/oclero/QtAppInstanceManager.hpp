@@ -17,7 +17,10 @@ public:
   bool isPrimaryInstance() const;
   bool isSecondaryInstance() const;
   int secondaryInstanceCount() const;
-  
+
+  bool forceSingleInstance() const;
+  void setForceSingleInstance(bool force);
+
 public slots:
   void sendMessageToPrimary(const QByteArray& data);
   void sendMessageToSecondary(const unsigned int id, const QByteArray& data);
@@ -26,6 +29,7 @@ signals:
   void instanceRoleChanged();
   void primaryInstanceMessageReceived(const QByteArray& data);
   void secondaryInstanceMessageReceived(const unsigned int id, const QByteArray& data);
+  void forceSingleInstanceChanged();
 
 private:
   struct Impl;
