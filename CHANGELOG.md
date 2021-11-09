@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.1
+
+- Deploy Qt for examples and unit tests.
+
 ## v1.0.0
 
 - Allow for communication between application instances.
