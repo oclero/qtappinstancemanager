@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.19.0)
 enable_testing()
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(DeployQt)
 
 # Set project information.
@@ -20,9 +20,11 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # The library.
 add_subdirectory(lib)
 
-# Tests.
-add_subdirectory(tests)
+if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
+  # Tests.
+  add_subdirectory(tests)
 
-# Examples.
-add_subdirectory(examples/single)
-add_subdirectory(examples/multiple)
+  # Examples.
+  add_subdirectory(examples/single)
+  add_subdirectory(examples/multiple)
+endif()
