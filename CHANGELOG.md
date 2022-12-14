@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.0
+
+- Linux compatibility fixes.
+
 ## v1.0.1
 
 - Deploy Qt for examples and unit tests.

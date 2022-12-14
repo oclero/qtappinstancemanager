@@ -7,7 +7,7 @@ include(DeployQt)
 # Set project information.
 project("QtAppInstanceManager"
   LANGUAGES CXX
-  VERSION 1.0.2.0
+  VERSION 1.1.0.0
 )
 set(PROJECT_NAMESPACE "oclero")
 
