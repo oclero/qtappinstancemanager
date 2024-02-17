@@ -133,6 +133,7 @@
     {
       "name": "macos",
       "configurePreset": "macos",
+      "configuration": "Release",
       "output": {
         "outputOnFailure": true
       },
@@ -150,6 +151,7 @@
     {
       "name": "linux",
       "configurePreset": "linux",
+      "configuration": "Release",
       "output": {
         "outputOnFailure": true
       },
@@ -167,6 +169,7 @@
     {
       "name": "windows",
       "configurePreset": "windows",
+      "configuration": "Release",
       "output": {
         "outputOnFailure": true
       },

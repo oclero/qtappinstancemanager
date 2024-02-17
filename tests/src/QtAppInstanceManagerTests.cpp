@@ -106,7 +106,7 @@ void Tests::test_primaryInstanceKilled() {
   // Check if the secondary instance becomes a primary one when the former has been shutdown.
   auto primaryInstanceReplaced = false;
   std::for_each(
-    secondaryInstances.begin(), secondaryInstances.end(), [&primaryInstanceReplaced](auto& secondaryInstance) {
+    secondaryInstances.begin(), secondaryInstances.end(), [this, &primaryInstanceReplaced](auto& secondaryInstance) {
       QObject::connect(secondaryInstance.get(), &QtAppInstanceManager::instanceRoleChanged, secondaryInstance.get(),
         [this, &secondaryInstance, &primaryInstanceReplaced]() {
           if (secondaryInstance->isPrimaryInstance()) {
