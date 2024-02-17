@@ -27,7 +27,7 @@ jobs:
           target: desktop
 
       - name: Configure CMake
-        run: cmake --preset macos -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=OFF -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY=""
+        run: cmake --preset macos -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=OFF -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY="-"
 
       - name: Build library
         run: cmake --build --preset macos
