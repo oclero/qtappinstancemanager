@@ -4,10 +4,12 @@ on:
   push:
     branches:
       - master
+      - dev
       - setup-ci
   pull_request:
     branches:
-      - master"
+      - master
+      - dev
 
 jobs:
   build:
