@@ -108,7 +108,7 @@ void Tests::test_primaryInstanceKilled() {
   std::for_each(
     secondaryInstances.begin(), secondaryInstances.end(), [&primaryInstanceReplaced](auto& secondaryInstance) {
       QObject::connect(secondaryInstance.get(), &QtAppInstanceManager::instanceRoleChanged, secondaryInstance.get(),
-        [&secondaryInstance, &primaryInstanceReplaced]() {
+        [this, &secondaryInstance, &primaryInstanceReplaced]() {
           if (secondaryInstance->isPrimaryInstance()) {
             primaryInstanceReplaced = true;
           }
