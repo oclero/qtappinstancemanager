@@ -11,9 +11,9 @@ set(HEADERS
 )
 
 set(SOURCES
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/oclero/QtAppInstanceManager.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/oclero/LocalEndpoint.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/oclero/LocalEndpoint.hpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/source/oclero/QtAppInstanceManager.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/source/oclero/LocalEndpoint.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/source/oclero/LocalEndpoint.hpp
 )
 
 # Configure target.
@@ -30,7 +30,7 @@ target_include_directories(${LIB_TARGET_NAME}
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   PRIVATE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source>
 )
 
 target_link_libraries(${LIB_TARGET_NAME}
@@ -45,7 +45,7 @@ set_target_properties(${LIB_TARGET_NAME}
     AUTORCC ON
     OUTPUT_NAME ${LIB_TARGET_NAME}
     PROJECT_LABEL ${LIB_TARGET_NAME}
-    FOLDER lib
+    FOLDER src
     SOVERSION ${PROJECT_VERSION_MAJOR}
     VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     PUBLIC_HEADER ${HEADERS}

@@ -9,8 +9,7 @@ int main(int argc, char* argv[]) {
   QCoreApplication::setOrganizationName("example");
   QCoreApplication app(argc, argv);
 
-  oclero::QtAppInstanceManager instanceManager;
-  instanceManager.setForceSingleInstance(true);
+  oclero::QtAppInstanceManager instanceManager(oclero::QtAppInstanceManager::Mode::SingleInstance);
   qDebug() << "Instance role: " << (instanceManager.isPrimaryInstance() ? "Primary" : "Secondary");
 
   QObject::connect(&instanceManager, &oclero::QtAppInstanceManager::secondaryInstanceMessageReceived, &instanceManager,

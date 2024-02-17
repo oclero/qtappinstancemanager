@@ -78,9 +78,9 @@ Complete example can be found in the [`/examples` directory](examples/single), i
 ```c++
 // Initialize instance manager to force only one instance running.
 oclero::QtAppInstanceManager instanceManager;
-instanceManager.setForceSingleInstance(true);
+instanceManager.setMode(QtAppInstanceManager::Mode::SingleInstance);
 
-// When another instance will start, it will immediately quit and send its
+// When another instance will start, it will immediately quit the app and send its
 // arguments to the primary instance.
 QObject::connect(&instanceManager,
   &oclero::QtAppInstanceManager::secondaryInstanceMessageReceived,
@@ -91,6 +91,19 @@ QObject::connect(&instanceManager,
     // - Open a file in an another tab of your main window.
     // - ...
     qDebug() << "Secondary instance message received: " << data;
+  });
+
+// If you don't want for the app to quit, you can set the manual mode and handle this step by yourself.
+instanceManager.setAppExitMode(QtAppInstanceManager::AppExitMode::Manual);
+QObject::connect(&instanceManager,
+  &QtAppInstanceManager::appExitRequested,
+  &singleInstance,
+  []() {
+    // Do what you want.
+    // Usually you should quit the app.
+    qDebug() << "This app should exit";
+    QCoreApplication::quit();
+    std::exit(EXIT_SUCCESS);
   });
 ```
 

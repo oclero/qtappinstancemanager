@@ -9,7 +9,8 @@ namespace oclero {
 struct QtAppInstanceManager::Impl {
   QtAppInstanceManager& owner;
   LocalEndpoint endpoint;
-  bool forceSingleInstance{ false };
+  Mode mode{ Mode::MultipleInstances };
+  AppExitMode appExitMode{ AppExitMode::Auto };
 
   Impl(QtAppInstanceManager& o)
     : owner(o) {
@@ -28,7 +29,7 @@ struct QtAppInstanceManager::Impl {
 
   void quitIfRequired() {
     // Force quit when only a single instance is allowed.
-    if (forceSingleInstance && endpoint.role() == LocalEndpoint::Role::Client) {
+    if (mode == Mode::SingleInstance && endpoint.role() == LocalEndpoint::Role::Client) {
       // Send last message before quitting.
       auto args = QCoreApplication::arguments();
       args.removeFirst();
@@ -36,15 +37,26 @@ struct QtAppInstanceManager::Impl {
       endpoint.sendToServer(data);
 
       // Quit.
-      QCoreApplication::quit();
-      std::exit(EXIT_SUCCESS);
+      emit owner.appExitRequested();
+      if (appExitMode == AppExitMode::Auto) {
+        QCoreApplication::quit();
+        std::exit(EXIT_SUCCESS);
+      }
     }
   }
 };
 
 QtAppInstanceManager::QtAppInstanceManager(QObject* parent)
+  : QtAppInstanceManager(Mode::MultipleInstances, parent) {}
+
+QtAppInstanceManager::QtAppInstanceManager(Mode mode, QObject* parent)
+  : QtAppInstanceManager(Mode::MultipleInstances, AppExitMode::Auto, parent) {}
+
+QtAppInstanceManager::QtAppInstanceManager(Mode mode, AppExitMode appExitMode, QObject* parent)
   : QObject(parent)
   , _impl(new Impl(*this)) {
+  _impl->mode = mode;
+  _impl->appExitMode = appExitMode;
   QTimer::singleShot(0, [this]() {
     _impl->quitIfRequired();
   });
@@ -76,16 +88,27 @@ void QtAppInstanceManager::sendMessageToSecondary(const unsigned int id, const Q
   }
 }
 
-bool QtAppInstanceManager::forceSingleInstance() const {
-  return _impl->forceSingleInstance;
+QtAppInstanceManager::Mode QtAppInstanceManager::mode() const {
+  return _impl->mode;
 }
 
-void QtAppInstanceManager::setForceSingleInstance(bool force) {
-  if (force != _impl->forceSingleInstance) {
-    _impl->forceSingleInstance = force;
-    emit forceSingleInstanceChanged();
+void QtAppInstanceManager::setMode(Mode mode) {
+  if (mode != _impl->mode) {
+    _impl->mode = mode;
+    emit modeChanged();
 
     _impl->quitIfRequired();
+  }
+}
+
+QtAppInstanceManager::AppExitMode QtAppInstanceManager::appExitMode() const {
+  return _impl->appExitMode;
+}
+
+void QtAppInstanceManager::setAppExitMode(AppExitMode appExitMode) {
+  if (appExitMode != _impl->appExitMode) {
+    _impl->appExitMode = appExitMode;
+    emit appExitModeChanged();
   }
 }
 } // namespace oclero

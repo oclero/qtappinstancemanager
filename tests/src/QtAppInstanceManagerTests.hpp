@@ -13,4 +13,5 @@ private slots:
   void test_messages();
   void test_primaryInstanceKilled();
   void test_secondaryInstanceCount();
+  void test_forceSingleInstance();
 };

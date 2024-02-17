@@ -106,9 +106,9 @@ void Tests::test_primaryInstanceKilled() {
   // Check if the secondary instance becomes a primary one when the former has been shutdown.
   auto primaryInstanceReplaced = false;
   std::for_each(
-    secondaryInstances.begin(), secondaryInstances.end(), [this, &primaryInstanceReplaced](auto& secondaryInstance) {
+    secondaryInstances.begin(), secondaryInstances.end(), [&primaryInstanceReplaced](auto& secondaryInstance) {
       QObject::connect(secondaryInstance.get(), &QtAppInstanceManager::instanceRoleChanged, secondaryInstance.get(),
-        [this, &secondaryInstance, &primaryInstanceReplaced]() {
+        [&secondaryInstance, &primaryInstanceReplaced]() {
           if (secondaryInstance->isPrimaryInstance()) {
             primaryInstanceReplaced = true;
           }
@@ -156,4 +156,27 @@ void Tests::test_secondaryInstanceCount() {
   // Count after secondary instances are disconnected.
   const auto countAfterDisconnections = primaryInstance.secondaryInstanceCount();
   QCOMPARE(countAfterDisconnections, 0);
+}
+
+void Tests::test_forceSingleInstance() {
+  // Single instance.
+  QtAppInstanceManager singleInstance(QtAppInstanceManager::Mode::SingleInstance);
+  QCoreApplication::processEvents();
+
+  constexpr auto totalSecondaryInstanceCount = 3;
+  auto livingSecondaryInstances = totalSecondaryInstanceCount;
+  std::array<std::unique_ptr<QtAppInstanceManager>, totalSecondaryInstanceCount> secondaryInstances;
+  for (auto i = 0; i < totalSecondaryInstanceCount; ++i) {
+    auto secondaryInstance = std::make_unique<QtAppInstanceManager>(
+      QtAppInstanceManager::Mode::SingleInstance, QtAppInstanceManager::AppExitMode::Manual);
+    QObject::connect(
+      secondaryInstance.get(), &QtAppInstanceManager::appExitRequested, &singleInstance,
+      [&livingSecondaryInstances]() {
+        livingSecondaryInstances--;
+      });
+    secondaryInstances[i] = std::move(secondaryInstance);
+  }
+  QTest::qWait(1000);
+
+  QCOMPARE(livingSecondaryInstances, 0);
 }

@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
     qDebug() << "Primary instance started";
   } else if (instanceManager.isSecondaryInstance()) {
     qDebug() << "Secondary instance started";
-    const auto msg = "Secondary instance started with args: " + app.arguments().join(', ');
+    const auto msg = "Secondary instance started with args: " + app.arguments().join(", ");
     instanceManager.sendMessageToPrimary(msg.toUtf8());
   }
 
