@@ -28,7 +28,7 @@ enum class Step {
 
 struct SocketConnectionInfo {
   QLocalSocket* socket{ nullptr };
-  quint64 id{ 0u };
+  LocalEndpoint::Id id{ 0u };
   Step step{ Step::Handshake };
   quint64 pid{ 0u };
   quint64 bodySize{ 0u };

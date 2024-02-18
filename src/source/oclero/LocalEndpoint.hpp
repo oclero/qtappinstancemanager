@@ -15,12 +15,12 @@ class LocalEndpoint : public QObject {
   Q_OBJECT
 
   Q_PROPERTY(Role role READ role NOTIFY roleChanged)
-  Q_PROPERTY(unsigned int id READ id NOTIFY idChanged)
-  Q_PROPERTY(unsigned int serverId READ serverId NOTIFY serverIdChanged)
+  Q_PROPERTY(Id id READ id NOTIFY idChanged)
+  Q_PROPERTY(Id serverId READ serverId NOTIFY serverIdChanged)
   Q_PROPERTY(int secondaryInstanceCount READ secondaryInstanceCount NOTIFY clientCountChanged)
 
 public:
-  using Id = unsigned int;
+  using Id = quint64;
 
   enum class Role {
     Unknown,
