@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.2.1
+
+- Recommend FetchContent instead of submodule.
+
 ## v1.2.0
 
 - Rename `lib` folder into `src`, and `src` subfolder into `source`.
