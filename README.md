@@ -37,31 +37,23 @@ Also, it differs from [itay-grudev's SingleApplication](https://github.com/itay-
 
 ## Usage
 
-1. Add the library's repository as a Git submodule.
-
-   ```bash
-   git submodule add git@github.com:oclero/QtAppInstanceManager.git submodules/qtappinstancemanager
-   ```
-
-2. Download submodules.
-
-   ```bash
-   git submodule update --init --recursive
-   ```
-
-3. Add the library to your CMake project.
+1. Add the library as a dependency with CMake FetchContent.
 
    ```cmake
-   add_subdirectory(submodules/qtappinstancemanager)
+   include(FetchContent)
+   FetchContent_Declare(QtAppInstanceManager
+    GIT_REPOSITORY "https://github.com/oclero/qtappinstancemanager.git"
+   )
+   FetchContent_MakeAvailable(QtAppInstanceManager)
    ```
 
-4. Link with the library in CMake.
+2. Link with the library in CMake.
 
    ```cmake
    target_link_libraries(your_project oclero::QtAppInstanceManager)
    ```
 
-5. Include the only necessary header in your C++ file.
+3. Include the only necessary header in your C++ file.
 
    ```c++
    #include <oclero/QtAppInstanceManager.hpp>
