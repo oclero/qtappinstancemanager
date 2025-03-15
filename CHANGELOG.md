@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.3.0
+
+- Switch to Qt6.
+- Switch to Ninja for macOS builds.
+- Add `QTAPPINSTANCEMANAGER_TESTS` and `QTAPPINSTANCEMANAGER_EXAMPLES` options to enable tests and examples.
+
 ## v1.2.1
 
 - Recommend FetchContent instead of submodule.

@@ -1,16 +1,12 @@
 set(TESTS_TARGET_NAME ${PROJECT_NAME}Tests)
 
-find_package(Qt5
-  REQUIRED
-    Core
-    Test
-)
+find_package(Qt6 REQUIRED COMPONENTS Core Test)
 
 add_executable(${TESTS_TARGET_NAME})
 set_target_properties(${TESTS_TARGET_NAME}
   PROPERTIES
-    AUTOMOC ON
-    AUTORCC ON
+    CMAKE_AUTOMOC ON
+    CMAKE_AUTORCC ON
     INTERNAL_CONSOLE ON
     EXCLUDE_FROM_ALL ON
     FOLDER tests
@@ -31,13 +27,12 @@ target_include_directories(${TESTS_TARGET_NAME}
 target_link_libraries(${TESTS_TARGET_NAME}
   PRIVATE
     ${PROJECT_NAMESPACE}::${PROJECT_NAME}
-    Qt5::Core
-    Qt5::Test
+    Qt::Core
+    Qt::Test
 )
 add_test(NAME ${TESTS_TARGET_NAME}
   COMMAND $<TARGET_FILE:${TESTS_TARGET_NAME}>
-  WORKING_DIRECTORY $<TARGET_FILE_DIR:${TESTS_TARGET_NAME}>)
+  WORKING_DIRECTORY $<TARGET_FILE_DIR:${TESTS_TARGET_NAME}>
+)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${TESTS_SOURCES})
-
-target_deploy_qt(${TESTS_TARGET_NAME})

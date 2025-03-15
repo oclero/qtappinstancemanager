@@ -50,14 +50,14 @@ QtAppInstanceManager::QtAppInstanceManager(QObject* parent)
   : QtAppInstanceManager(Mode::MultipleInstances, parent) {}
 
 QtAppInstanceManager::QtAppInstanceManager(Mode mode, QObject* parent)
-  : QtAppInstanceManager(Mode::MultipleInstances, AppExitMode::Auto, parent) {}
+  : QtAppInstanceManager(mode, AppExitMode::Auto, parent) {}
 
 QtAppInstanceManager::QtAppInstanceManager(Mode mode, AppExitMode appExitMode, QObject* parent)
   : QObject(parent)
   , _impl(new Impl(*this)) {
   _impl->mode = mode;
   _impl->appExitMode = appExitMode;
-  QTimer::singleShot(0, [this]() {
+  QTimer::singleShot(0, this, [this]() {
     _impl->quitIfRequired();
   });
 }
