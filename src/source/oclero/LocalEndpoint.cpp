@@ -394,7 +394,7 @@ struct LocalEndpoint::Impl {
             qCDebug(LOGCAT_LOCALENDPOINT) << "[Client] Error: can't disconnect from server. Code:" << client->error();
           }
 #else
-          Q_UNUSED(disconnectResult);
+          Q_UNUSED(disconnectResult)
 #endif
         }
       }
