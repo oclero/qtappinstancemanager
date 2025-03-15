@@ -18,6 +18,9 @@ jobs:
       - name: Check Out
         uses: actions/checkout@v4
 
+      - name: Install Ninja
+        run: brew install ninja
+
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
