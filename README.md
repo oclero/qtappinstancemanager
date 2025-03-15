@@ -7,9 +7,9 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](https://mit-license.org/)
 [![CMake version](https://img.shields.io/badge/CMake-3.21+-064F8C?logo=cmake)](https://www.qt.io)
 [![C++ version](https://img.shields.io/badge/C++-17-00599C?logo=++)](https://www.qt.io)
-[![Qt version](https://img.shields.io/badge/Qt-5.15.2+-41CD52?logo=qt)](https://www.qt.io)
+[![Qt version](https://img.shields.io/badge/Qt-6.6.0+-41CD52?logo=qt)](https://www.qt.io)
 
-**QtAppInstanceManager** is a tool to control how many instances of your Qt5 application are running at the same time, and to send messages between instances. It uses a local socket under the hood. You may then build upon this foundation any messaging system or protocol, such as JSON-RPC for instance (NB: not provided because out of the scope of this library).
+**QtAppInstanceManager** is a tool to control how many instances of your Qt application are running at the same time, and to send messages between instances. It uses a local socket under the hood. You may then build upon this foundation any messaging system or protocol, such as JSON-RPC for instance (NB: not provided because out of the scope of this library).
 
 It is intended to be a replacement for `QtSingleApplication`, the deprecated Qt4 official project.
 
@@ -33,11 +33,11 @@ Also, it differs from [itay-grudev's SingleApplication](https://github.com/itay-
 
 - Platform: Windows, MacOS, Linux.
 - [CMake 3.21+](https://cmake.org/download/)
-- [Qt 5.15+](https://www.qt.io/download-qt-installer)
+- [Qt 6.6+](https://www.qt.io/download-qt-installer)
 
 ## Usage
 
-1. Add the library as a dependency with CMake FetchContent.
+1. Add the library as a dependency in your CMakeLists.txt, for example with FetchContent.
 
    ```cmake
    include(FetchContent)

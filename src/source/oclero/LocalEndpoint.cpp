@@ -172,8 +172,7 @@ struct LocalEndpoint::Impl {
       return;
 
     const auto id = socket->socketDescriptor();
-    auto& it =
-      serverClients.emplace_back(SocketConnectionInfo{ socket, static_cast<decltype(SocketConnectionInfo::id)>(id) });
+    serverClients.emplace_back(SocketConnectionInfo{ socket, static_cast<decltype(SocketConnectionInfo::id)>(id) });
 
     QObject::connect(socket, &QLocalSocket::destroyed, &owner, [this, socket]() {
 #if LOGCAT_LOCALENDPOINT
@@ -182,17 +181,22 @@ struct LocalEndpoint::Impl {
       removeClient(socket);
     });
 
-#pragma warning(push)
-#pragma warning(disable : 26812) // Warning about Qt not using enum class
-    QObject::connect(
-      socket, &QLocalSocket::errorOccurred, &owner, [this](QLocalSocket::LocalSocketError const errorCode) {
+#if defined(_MSC_VER)
+#  pragma warning(push)
+#  pragma warning(disable : 26812) // Warning about Qt not using enum class
+#endif
+
+    QObject::connect(socket, &QLocalSocket::errorOccurred, &owner, [](QLocalSocket::LocalSocketError const errorCode) {
 #if LOGCAT_LOCALENDPOINT
-        qCDebug(LOGCAT_LOCALENDPOINT) << "[Server] Client error occurred:" << errorCode;
+      qCDebug(LOGCAT_LOCALENDPOINT) << "[Server] Client error occurred:" << errorCode;
 #else
 				Q_UNUSED(errorCode);
 #endif
-      });
-#pragma warning(pop)
+    });
+
+#if defined(_MSC_VER)
+#  pragma warning(pop)
+#endif
 
     QObject::connect(socket, &QLocalSocket::disconnected, &owner, [this, socket]() {
 #if LOGCAT_LOCALENDPOINT
@@ -249,7 +253,7 @@ struct LocalEndpoint::Impl {
           readClientHandshake(socketInfo);
           sendHandshakeToClient(socketInfo);
           // There is some bytes left to read: it should be the header.
-          if (socketInfo.socket->bytesAvailable() >= sizeof(SocketConnectionInfo::bodySize)) {
+          if (socketInfo.socket->bytesAvailable() >= static_cast<qint64>(sizeof(SocketConnectionInfo::bodySize))) {
             readClientMessageHeader(socketInfo);
           }
           break;
@@ -267,7 +271,7 @@ struct LocalEndpoint::Impl {
 
   void readClientHandshake(SocketConnectionInfo& socketInfo) const {
     socketInfo.pid = {};
-    if (socketInfo.socket->bytesAvailable() < static_cast<quint64>(sizeof(SocketConnectionInfo::pid))) {
+    if (socketInfo.socket->bytesAvailable() < static_cast<qint64>(sizeof(SocketConnectionInfo::pid))) {
       return;
     }
 
@@ -306,13 +310,14 @@ struct LocalEndpoint::Impl {
     socketInfo.step = Step::Body;
 
     // There is some bytes left to read: it should be the body.
-    if (socketInfo.socket->bytesAvailable() >= bodySize) {
+    if (socketInfo.socket->bytesAvailable() >= static_cast<qint64>(bodySize)) {
       readClientMessageBody(socketInfo);
     }
   }
 
   void readClientMessageBody(SocketConnectionInfo& socketInfo) const {
-    if (socketInfo.socket->bytesAvailable() < socketInfo.bodySize || socketInfo.step != Step::Body) {
+    if (socketInfo.socket->bytesAvailable() < static_cast<qint64>(socketInfo.bodySize)
+        || socketInfo.step != Step::Body) {
       // Wait for more bytes to be written.
       return;
     }
@@ -382,15 +387,14 @@ struct LocalEndpoint::Impl {
 #if LOGCAT_LOCALENDPOINT
         qCDebug(LOGCAT_LOCALENDPOINT) << "[Client] Disconnecting from server";
 #endif
-        client->disconnectFromServer();
-
+        const auto disconnectResult = client->waitForDisconnected(1000);
         if (client->state() != QLocalSocket::UnconnectedState) {
-          const auto disconnectResult = client->waitForDisconnected(1000);
-
 #if LOGCAT_LOCALENDPOINT
           if (client->state() != QLocalSocket::UnconnectedState || !disconnectResult) {
             qCDebug(LOGCAT_LOCALENDPOINT) << "[Client] Error: can't disconnect from server. Code:" << client->error();
           }
+#else
+          Q_UNUSED(disconnectResult);
 #endif
         }
       }
@@ -447,7 +451,7 @@ struct LocalEndpoint::Impl {
       case Step::Handshake:
         readServerHandshake();
         // There is some bytes left to read: it should be the header.
-        if (clientSocketInfo.socket->bytesAvailable() >= sizeof(SocketConnectionInfo::bodySize)) {
+        if (clientSocketInfo.socket->bytesAvailable() >= static_cast<qint64>(sizeof(SocketConnectionInfo::bodySize))) {
           readServerMessageHeader();
         }
         break;
@@ -464,7 +468,7 @@ struct LocalEndpoint::Impl {
 
   void readServerHandshake() {
     clientSocketInfo.id = 0u;
-    if (clientSocketInfo.socket->bytesAvailable() < (quint64) sizeof(SocketConnectionInfo::id)) {
+    if (clientSocketInfo.socket->bytesAvailable() < static_cast<qint64>(sizeof(SocketConnectionInfo::id))) {
       return;
     }
 
@@ -490,7 +494,7 @@ struct LocalEndpoint::Impl {
   void readServerMessageHeader() {
     clientSocketInfo.bodySize = {};
 
-    if (client->bytesAvailable() < (quint64) sizeof(SocketConnectionInfo::bodySize)) {
+    if (client->bytesAvailable() < static_cast<qint64>(sizeof(SocketConnectionInfo::bodySize))) {
       return;
     }
 
@@ -506,13 +510,14 @@ struct LocalEndpoint::Impl {
     clientSocketInfo.bodySize = bodySize;
 
     // There is some bytes left to read: it should be the body.
-    if (client->bytesAvailable() >= bodySize) {
+    if (client->bytesAvailable() >= static_cast<qint64>(bodySize)) {
       readServerMessageBody();
     }
   }
 
   void readServerMessageBody() {
-    if (client->bytesAvailable() < clientSocketInfo.bodySize || clientSocketInfo.step != Step::Body) {
+    if (client->bytesAvailable() < static_cast<qint64>(clientSocketInfo.bodySize)
+        || clientSocketInfo.step != Step::Body) {
       // Wait for more bytes to be written.
       return;
     }

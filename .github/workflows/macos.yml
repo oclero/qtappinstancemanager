@@ -5,7 +5,6 @@ on:
     branches:
       - master
       - dev
-      - setup-ci
   pull_request:
     branches:
       - master
@@ -20,17 +19,18 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v3
+        uses: jurplel/install-qt-action@v4
         with:
-          version: "5.15.2"
+          version: "6.8.2"
           host: mac
           target: desktop
+          arch: clang_64
 
       - name: Configure CMake
-        run: cmake --preset macos -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=OFF -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY="-"
+        run: cmake --preset macos -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install
 
       - name: Build library
-        run: cmake --build --preset macos
+        run: cmake --build --preset macos --target install
 
       - name: Build tests
         run: cmake --build --preset macos-test

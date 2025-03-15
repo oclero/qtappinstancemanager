@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 6,
   "cmakeMinimumRequired": {
     "major": 3,
     "minor": 21,
@@ -9,11 +9,13 @@
     {
       "name": "macos",
       "displayName": "macOS",
-      "description": "Xcode project for macOS",
-      "generator": "Xcode",
+      "description": "Ninja Build for macOS",
+      "generator": "Ninja",
       "binaryDir": "${sourceDir}/_build",
       "cacheVariables": {
-        "Qt5_DIR": "/opt/homebrew/opt/qt/lib/cmake/Qt5"
+        "CMAKE_PREFIX_PATH": "/opt/homebrew/opt/qt/lib/cmake/Qt6",
+        "QTAPPINSTANCEMANAGER_TESTS": true,
+        "QTAPPINSTANCEMANAGER_EXAMPLES": true
       },
       "condition": {
         "type": "equals",
@@ -28,7 +30,9 @@
       "generator": "Visual Studio 17 2022",
       "binaryDir": "${sourceDir}/_build",
       "cacheVariables": {
-        "Qt5_DIR": "C:/Qt/5.15.2/msvc2019_64/lib/cmake/Qt5"
+        "CMAKE_PREFIX_PATH": "C:/Qt/6.8.0/msvc2022_64",
+        "QTAPPINSTANCEMANAGER_TESTS": true,
+        "QTAPPINSTANCEMANAGER_EXAMPLES": true
       },
       "condition": {
         "type": "equals",
@@ -39,9 +43,13 @@
     {
       "name": "linux",
       "displayName": "Linux",
-      "description": "Makefile for Linux",
-      "generator": "Unix Makefiles",
+      "description": "Ninja Build for Linux",
+      "generator": "Ninja",
       "binaryDir": "${sourceDir}/_build",
+      "cacheVariables": {
+        "QTAPPINSTANCEMANAGER_TESTS": true,
+        "QTAPPINSTANCEMANAGER_EXAMPLES": true
+      },
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",
@@ -54,8 +62,10 @@
       "name": "macos",
       "displayName": "macOS",
       "configurePreset": "macos",
-      "description": "Release build with Xcode for macOS",
-      "targets": ["QtAppInstanceManager"],
+      "description": "Release build for macOS",
+      "targets": [
+        "QtAppInstanceManager"
+      ],
       "configuration": "Release",
       "condition": {
         "type": "equals",
@@ -67,8 +77,10 @@
       "name": "macos-test",
       "displayName": "Tests for macOS",
       "configurePreset": "macos",
-      "description": "Tests release build with Xcode for macOS",
-      "targets": ["QtAppInstanceManagerTests"],
+      "description": "Tests release build for macOS",
+      "targets": [
+        "QtAppInstanceManagerTests"
+      ],
       "configuration": "Release",
       "condition": {
         "type": "equals",
@@ -80,8 +92,10 @@
       "name": "windows",
       "displayName": "Windows",
       "configurePreset": "windows",
-      "description": "Release build with Visual Studio for Windows",
-      "targets": ["QtAppInstanceManager"],
+      "description": "Release build for Windows",
+      "targets": [
+        "QtAppInstanceManager"
+      ],
       "configuration": "Release",
       "condition": {
         "type": "equals",
@@ -93,8 +107,10 @@
       "name": "windows-test",
       "displayName": "Tests for Windows",
       "configurePreset": "windows",
-      "description": "Tests release build with Visual Studio for Windows",
-      "targets": ["QtAppInstanceManagerTests"],
+      "description": "Tests release build for Windows",
+      "targets": [
+        "QtAppInstanceManagerTests"
+      ],
       "configuration": "Release",
       "condition": {
         "type": "equals",
@@ -107,7 +123,9 @@
       "displayName": "Linux",
       "configurePreset": "linux",
       "description": "Release build for Linux",
-      "targets": ["QtAppInstanceManager"],
+      "targets": [
+        "QtAppInstanceManager"
+      ],
       "configuration": "Release",
       "condition": {
         "type": "equals",
@@ -120,7 +138,9 @@
       "displayName": "Tests for Linux",
       "configurePreset": "linux",
       "description": "Tests release build for Linux",
-      "targets": ["QtAppInstanceManagerTests"],
+      "targets": [
+        "QtAppInstanceManagerTests"
+      ],
       "configuration": "Release",
       "condition": {
         "type": "equals",
@@ -183,6 +203,62 @@
         "lhs": "${hostSystemName}",
         "rhs": "Windows"
       }
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "macos",
+      "displayName": "macOS",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "macos"
+        },
+        {
+          "type": "build",
+          "name": "macos-test"
+        },
+        {
+          "type": "test",
+          "name": "macos"
+        }
+      ]
+    },
+    {
+      "name": "windows",
+      "displayName": "Windows",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "windows"
+        },
+        {
+          "type": "build",
+          "name": "windows-test"
+        },
+        {
+          "type": "test",
+          "name": "windows"
+        }
+      ]
+    },
+    {
+      "name": "linux",
+      "displayName": "Linux",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "linux"
+        },
+        {
+          "type": "build",
+          "name": "linux-test"
+        },
+        {
+          "type": "test",
+          "name": "linux"
+        }
+      ]
     }
   ]
 }
